@@ -1,9 +1,7 @@
 
-import PyPDF2
 from PyPDF2 import PdfReader
-import xlsxwriter
 import pandas as pd
-
+import re
 
 pdf_file=open('Contactus.pdf','rb')   
 read_file=PdfReader(pdf_file)
@@ -13,26 +11,22 @@ page= read_file.pages[0]
 text = page.extract_text()
 
 # print(len(text))
-# print(text)
 
-# pdf_file.close
+# print(text.strip())
 
+pdf_file.close
 
-# excelbook=xlsxwriter.Workbook('excelabc.xlsx')
-# excel_sheet= excelbook.add_worksheet()
-# excel_sheet.write('A1', 'English')
-# excel_sheet.write('B1', 'Hindi')
-# excel_sheet.write('C1', 'Maths')
-# excel_sheet.write('D1', 'Science')
 
 rows = text.split('\n')
-data = [row.split() for row in rows if row.strip() != '']
-
-#  df.to_excel(excel_path, index=False, header=False)
-
+print(rows)
+data = []
+for row in rows:
+    column= re.split(r'\s{2,}',row.strip())
+    if len(column) >0 :
+        data.append(column)
+# print(data)
 df = pd.DataFrame(data)
 df.to_excel("excelabc.xlsx",index=False ,header=False)
 
 
 
-# excelbook.close
